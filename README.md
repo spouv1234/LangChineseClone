@@ -1,28 +1,37 @@
 # LangApp
 
-A modern language learning application built with React Native and Expo.
+<div align="center">
+  <img src="assets/images/logo.png" alt="LangApp Logo" width="200"/>
+  
+  [![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactnative.dev)
+  [![Expo](https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white)](https://expo.dev)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+</div>
 
-## Features
+A modern, intuitive language learning application built with React Native and Expo. LangApp helps users learn new languages through an engaging and personalized experience.
 
-- **Personalized Learning Experience**
-  - Custom onboarding process
-  - Multiple language options
-  - Skill level assessment
-  - Progress tracking
+## ✨ Features
 
-- **Interactive Learning Tools**
-  - Comprehensive lessons library
-  - Interactive dictionary
-  - Practice exercises
-  - Progress tracking
+### 🎯 Personalized Learning Experience
+- Custom onboarding process
+- Multiple language options (Chinese, Spanish, French, Japanese, Korean)
+- Skill level assessment (Beginner, Intermediate, Advanced)
+- Progress tracking and achievements
 
-- **User-Friendly Interface**
-  - Clean, modern design
-  - Intuitive navigation
-  - Responsive layout
-  - Dark mode support
+### 📚 Interactive Learning Tools
+- Comprehensive lessons library
+- Interactive dictionary with pronunciation
+- Practice exercises and quizzes
+- Progress tracking and statistics
 
-## Getting Started
+### 🎨 User-Friendly Interface
+- Clean, modern design
+- Intuitive navigation
+- Responsive layout
+- Dark mode support
+- Smooth animations and transitions
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
@@ -42,6 +51,8 @@ A modern language learning application built with React Native and Expo.
 2. Install dependencies:
    ```bash
    npm install
+   # or
+   yarn install
    ```
 
 3. Start the development server:
@@ -54,7 +65,7 @@ A modern language learning application built with React Native and Expo.
    - Press 'a' for Android emulator
    - Scan QR code with Expo Go app for physical device
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 LangApp/
@@ -68,7 +79,16 @@ LangApp/
 └── package.json      # Project dependencies
 ```
 
-## Contributing
+## 🛠️ Built With
+
+- [React Native](https://reactnative.dev) - Mobile framework
+- [Expo](https://expo.dev) - Development platform
+- [React Navigation](https://reactnavigation.org) - Routing and navigation
+- [React Native Paper](https://callstack.github.io/react-native-paper/) - UI components
+
+## 🤝 Contributing
+
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -76,17 +96,30 @@ LangApp/
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## License
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
+## 🙏 Acknowledgments
 
-- React Native
-- Expo
-- React Navigation
+- [React Native](https://reactnative.dev) team
+- [Expo](https://expo.dev) team
+- [React Navigation](https://reactnavigation.org) team
 - All contributors and supporters
 
-## Support
+## 📞 Support
 
-For support, please open an issue in the GitHub repository.
+For support, please:
+1. Check the [documentation](https://github.com/spouv1234/LangChineseClone/wiki)
+2. Search for [existing issues](https://github.com/spouv1234/LangChineseClone/issues)
+3. Create a new issue if needed
+
+## 📱 Screenshots
+
+(Screenshots will be added soon)
+
+---
+
+<div align="center">
+  Made with ❤️ by the LangApp team
+</div>
