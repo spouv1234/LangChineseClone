@@ -13,12 +13,14 @@ const OnboardingScreen = ({ navigation }) => {
   const [name, setName] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('');
+  const [selectedVoice, setSelectedVoice] = useState('');
 
   const languages = ['Chinese', 'Spanish', 'French', 'Japanese', 'Korean'];
   const levels = ['Beginner', 'Intermediate', 'Advanced'];
+  const voices = ['Male', 'Female'];
 
   const handleComplete = () => {
-    // TODO: Save user preferences
+    // TODO: Save user preferences including voice selection
     navigation.replace('MainApp');
   };
 
@@ -92,14 +94,40 @@ const OnboardingScreen = ({ navigation }) => {
           </View>
         </View>
 
+        {/* Voice Gender Selection */}
+        <View style={styles.section}>
+          <Text style={styles.label}>Preferred voice for pronunciation?</Text>
+          <View style={styles.optionsContainer}>
+            {voices.map((voice) => (
+              <TouchableOpacity
+                key={voice}
+                style={[
+                  styles.option,
+                  selectedVoice === voice && styles.selectedOption,
+                ]}
+                onPress={() => setSelectedVoice(voice)}
+              >
+                <Text
+                  style={[
+                    styles.optionText,
+                    selectedVoice === voice && styles.selectedOptionText,
+                  ]}
+                >
+                  {voice}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
         {/* Complete Button */}
         <TouchableOpacity
           style={[
             styles.button,
-            (!name || !selectedLanguage || !selectedLevel) && styles.buttonDisabled,
+            (!name || !selectedLanguage || !selectedLevel || !selectedVoice) && styles.buttonDisabled,
           ]}
           onPress={handleComplete}
-          disabled={!name || !selectedLanguage || !selectedLevel}
+          disabled={!name || !selectedLanguage || !selectedLevel || !selectedVoice}
         >
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>

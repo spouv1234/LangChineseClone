@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as PaperProvider, useTheme } from 'react-native-paper';
 import { useColorScheme } from 'react-native';
+import { UserPreferencesProvider } from './src/context/UserPreferencesContext';
 import AppNavigator from './src/navigation/AppNavigator';
 
 export default function App() {
@@ -22,11 +23,13 @@ export default function App() {
   };
 
   return (
-    <SafeAreaProvider>
-      <PaperProvider theme={theme}>
-        <StatusBar style={isDark ? 'light' : 'dark'} />
-        <AppNavigator />
-      </PaperProvider>
-    </SafeAreaProvider>
+    <UserPreferencesProvider>
+      <SafeAreaProvider>
+        <PaperProvider theme={theme}>
+          <StatusBar style={isDark ? 'light' : 'dark'} />
+          <AppNavigator />
+        </PaperProvider>
+      </SafeAreaProvider>
+    </UserPreferencesProvider>
   );
 } 
