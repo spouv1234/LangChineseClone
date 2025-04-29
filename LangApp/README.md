@@ -1,54 +1,92 @@
-# LangApp
+# DuChinese - Chinese Learning App
 
-A language learning application built with React Native and Expo.
+A React Native application built with Expo for learning Chinese through interactive lessons and stories.
 
 ## Features
 
-- Language learning interface
-- Interactive lessons
-- Progress tracking
-- User authentication
-- Cross-platform support (iOS, Android, Web)
+- 🎨 iOS Human Interface Guidelines compliant design
+- 🌓 Light and dark theme support
+- 📱 Cross-platform (iOS, Android)
+- 🈺 Chinese character writing practice
+- 🔤 Pinyin support
+- 📚 Interactive lessons
+
+## Recent Optimizations
+
+The codebase has been optimized for better performance and maintainability:
+
+- **Unified Text Component**: Consolidated multiple text components into a single, efficient `Text` component that follows iOS HIG
+- **Optimized Dependencies**: Removed unused dependencies and simplified the babel configuration
+- **Clean Architecture**: Removed duplicate code and unused components
+- **Type Safety**: Enhanced TypeScript implementation
 
 ## Tech Stack
 
 - React Native
-- Expo SDK 52
+- Expo
+- TypeScript
 - React Navigation
 - React Native Paper
-- TypeScript
+- Hanzi Writer (for Chinese character writing)
 
 ## Getting Started
 
-### Prerequisites
+1. **Installation**
+   ```bash
+   npm install
+   ```
 
-- Node.js (v16 or higher)
-- npm or yarn
-- Expo CLI
+2. **Running the app**
+   ```bash
+   npx expo start
+   ```
+   Then:
+   - Press 'i' for iOS simulator
+   - Press 'a' for Android emulator
+   - Scan QR code with Expo Go app for physical device
 
-### Installation
+## Project Structure
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/LangApp.git
-cd LangApp
+```
+LangApp/
+├── app/                 # Main application screens
+├── assets/             # Images, fonts, and other static files
+├── components/         # Reusable UI components
+├── constants/          # Theme, colors, and other constants
+└── src/               # Core application logic
+    ├── navigation/    # Navigation configuration
+    └── screens/       # Screen components
 ```
 
-2. Install dependencies:
-```bash
-npm install
+## Component Usage
+
+### Text Component
+The unified Text component follows iOS Human Interface Guidelines:
+
+```tsx
+import { Text } from '@/components/Text';
+
+// Title text
+<Text variant="title1">Welcome to DuChinese</Text>
+
+// Body text
+<Text variant="body">Learn Chinese with ease</Text>
+
+// Custom styled text
+<Text variant="headline" color="#007AFF">Start Learning</Text>
 ```
 
-3. Start the development server:
-```bash
-npx expo start
-```
+## Theme System
 
-4. Run on your preferred platform:
-- Press 'i' for iOS simulator
-- Press 'a' for Android emulator
-- Press 'w' for web browser
-- Scan QR code with Expo Go app on your device
+The app uses a semantic color system that automatically adapts to light and dark modes:
+
+```tsx
+import { semanticColors } from '@/constants/Colors';
+
+// Colors automatically adapt to theme
+backgroundColor: semanticColors.background
+textColor: semanticColors.text
+```
 
 ## Contributing
 

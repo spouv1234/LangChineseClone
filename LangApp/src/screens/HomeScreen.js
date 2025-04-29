@@ -1,84 +1,104 @@
 import React from 'react';
-import { 
-  View, 
-  ScrollView, 
-  StyleSheet, 
-  TouchableOpacity 
+import {
+  View,
+  ScrollView,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
 } from 'react-native';
-import { 
-  Text, 
-  Card, 
-  ProgressBar, 
-  useTheme 
-} from 'react-native-paper';
+import { colors, typography, spacing, shadows } from '../theme';
 
 const HomeScreen = ({ navigation }) => {
-  const theme = useTheme();
-
   const featuredLessons = [
     {
-      id: 1,
-      title: 'Beginner Story 1',
-      level: 'HSK 1',
-      progress: 0.6,
+      id: '1',
+      title: 'Beginner Chinese',
+      description: 'Start your Chinese learning journey',
+      image: require('../../assets/images/beginner-lesson.jpg'),
+      level: 'Beginner',
     },
     {
-      id: 2,
-      title: 'Daily Life',
-      level: 'HSK 2',
-      progress: 0.3,
+      id: '2',
+      title: 'Daily Conversations',
+      description: 'Essential phrases for everyday life',
+      image: require('../../assets/images/conversation-lesson.jpg'),
+      level: 'Intermediate',
+    },
+  ];
+
+  const recentLessons = [
+    {
+      id: '3',
+      title: 'Business Chinese',
+      progress: 75,
     },
     {
-      id: 3,
-      title: 'Chinese Culture',
-      level: 'HSK 3',
-      progress: 0.1,
+      id: '4',
+      title: 'Travel Phrases',
+      progress: 30,
     },
   ];
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.greeting}>Welcome back!</Text>
+    <ScrollView 
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+    >
+      {/* Welcome Section */}
+      <View style={styles.welcomeSection}>
+        <Text style={styles.welcomeText}>Welcome back!</Text>
         <Text style={styles.subtitle}>Continue your learning journey</Text>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Your Progress</Text>
-        <Card style={styles.progressCard}>
-          <Card.Content>
-            <Text style={styles.progressTitle}>Overall Progress</Text>
-            <ProgressBar 
-              progress={0.45} 
-              color={theme.colors.primary}
-              style={styles.progressBar}
-            />
-            <Text style={styles.progressText}>45% Complete</Text>
-          </Card.Content>
-        </Card>
-      </View>
-
+      {/* Featured Lessons */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Featured Lessons</Text>
-        {featuredLessons.map((lesson) => (
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.featuredContainer}
+        >
+          {featuredLessons.map((lesson) => (
+            <TouchableOpacity
+              key={lesson.id}
+              style={styles.featuredCard}
+              onPress={() => navigation.navigate('LessonDetail', { lessonId: lesson.id })}
+            >
+              <Image source={lesson.image} style={styles.featuredImage} />
+              <View style={styles.featuredContent}>
+                <Text style={styles.featuredTitle}>{lesson.title}</Text>
+                <Text style={styles.featuredDescription}>{lesson.description}</Text>
+                <View style={styles.levelBadge}>
+                  <Text style={styles.levelText}>{lesson.level}</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+
+      {/* Recent Lessons */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Continue Learning</Text>
+        {recentLessons.map((lesson) => (
           <TouchableOpacity
             key={lesson.id}
-            onPress={() => navigation.navigate('Reading', { lessonId: lesson.id })}
+            style={styles.recentCard}
+            onPress={() => navigation.navigate('LessonDetail', { lessonId: lesson.id })}
           >
-            <Card style={styles.lessonCard}>
-              <Card.Content>
-                <Text style={styles.lessonTitle}>{lesson.title}</Text>
-                <Text style={styles.lessonLevel}>{lesson.level}</Text>
-                <ProgressBar 
-                  progress={lesson.progress} 
-                  color={theme.colors.primary}
-                  style={styles.lessonProgress}
+            <View style={styles.recentContent}>
+              <Text style={styles.recentTitle}>{lesson.title}</Text>
+              <View style={styles.progressBar}>
+                <View 
+                  style={[
+                    styles.progressFill,
+                    { width: `${lesson.progress}%` }
+                  ]} 
                 />
-                <Text style={styles.lessonProgressText}>
-                  {Math.round(lesson.progress * 100)}% Complete
-                </Text>
-              </Card.Content>
-            </Card>
+              </View>
+              <Text style={styles.progressText}>{lesson.progress}% complete</Text>
+            </View>
           </TouchableOpacity>
         ))}
       </View>
@@ -89,66 +109,105 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.background.primary,
   },
-  header: {
-    padding: 20,
-    backgroundColor: '#fff',
+  contentContainer: {
+    padding: spacing.screenPadding,
   },
-  greeting: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 8,
+  welcomeSection: {
+    marginBottom: spacing.lg,
+  },
+  welcomeText: {
+    fontSize: typography.fontSize.title1,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.label.primary,
+    marginBottom: spacing.xs,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#666',
+    fontSize: typography.fontSize.body,
+    color: colors.label.secondary,
   },
   section: {
-    padding: 20,
+    marginBottom: spacing.xl,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 16,
+    fontSize: typography.fontSize.title3,
+    fontWeight: typography.fontWeight.semibold,
+    color: colors.label.primary,
+    marginBottom: spacing.md,
   },
-  progressCard: {
-    marginBottom: 20,
+  featuredContainer: {
+    paddingRight: spacing.screenPadding,
   },
-  progressTitle: {
-    fontSize: 18,
-    marginBottom: 8,
+  featuredCard: {
+    width: 280,
+    marginRight: spacing.md,
+    backgroundColor: colors.background.primary,
+    borderRadius: 12,
+    ...shadows.md,
+  },
+  featuredImage: {
+    width: '100%',
+    height: 160,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+  },
+  featuredContent: {
+    padding: spacing.md,
+  },
+  featuredTitle: {
+    fontSize: typography.fontSize.headline,
+    fontWeight: typography.fontWeight.semibold,
+    color: colors.label.primary,
+    marginBottom: spacing.xs,
+  },
+  featuredDescription: {
+    fontSize: typography.fontSize.subhead,
+    color: colors.label.secondary,
+    marginBottom: spacing.sm,
+  },
+  levelBadge: {
+    backgroundColor: colors.systemBlue,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderRadius: 6,
+    alignSelf: 'flex-start',
+  },
+  levelText: {
+    color: colors.background.primary,
+    fontSize: typography.fontSize.caption1,
+    fontWeight: typography.fontWeight.medium,
+  },
+  recentCard: {
+    backgroundColor: colors.background.primary,
+    borderRadius: 12,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+    ...shadows.sm,
+  },
+  recentContent: {
+    flex: 1,
+  },
+  recentTitle: {
+    fontSize: typography.fontSize.body,
+    fontWeight: typography.fontWeight.medium,
+    color: colors.label.primary,
+    marginBottom: spacing.sm,
   },
   progressBar: {
-    height: 8,
-    borderRadius: 4,
-    marginBottom: 8,
+    height: 4,
+    backgroundColor: colors.background.secondary,
+    borderRadius: 2,
+    marginBottom: spacing.xs,
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: colors.systemBlue,
+    borderRadius: 2,
   },
   progressText: {
-    textAlign: 'right',
-    color: '#666',
-  },
-  lessonCard: {
-    marginBottom: 16,
-  },
-  lessonTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  lessonLevel: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 8,
-  },
-  lessonProgress: {
-    height: 6,
-    borderRadius: 3,
-    marginBottom: 4,
-  },
-  lessonProgressText: {
-    fontSize: 12,
-    color: '#666',
+    fontSize: typography.fontSize.caption1,
+    color: colors.label.secondary,
   },
 });
 
