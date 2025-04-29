@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   ScrollView,
@@ -10,38 +10,66 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, typography, spacing, shadows } from '../theme';
+import { useUserPreferences } from '../context/UserPreferencesContext';
+import { getLanguageConfig } from '../config/languages';
+import * as Speech from 'expo-speech';
+import { Button, Card, List } from 'react-native-paper';
 
 const LessonDetailScreen = ({ route, navigation }) => {
-  const { lessonId } = route.params;
+  const { lesson } = route.params;
+  const { preferences } = useUserPreferences();
+  const languageConfig = getLanguageConfig(preferences.language);
   const [currentSection, setCurrentSection] = useState('content');
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [availableVoices, setAvailableVoices] = useState([]);
+  const [selectedVoice, setSelectedVoice] = useState(null);
 
-  // Mock lesson data - in a real app, this would come from an API
-  const lesson = {
-    id: lessonId,
-    title: 'Greetings and Introductions',
-    level: 'HSK 1',
-    duration: '15 min',
-    content: [
-      {
-        type: 'text',
-        content: 'In this lesson, you will learn basic greetings and how to introduce yourself in Chinese.',
-      },
-      {
-        type: 'vocabulary',
-        items: [
-          { chinese: '你好', pinyin: 'nǐ hǎo', english: 'Hello' },
-          { chinese: '谢谢', pinyin: 'xiè xiè', english: 'Thank you' },
-          { chinese: '再见', pinyin: 'zài jiàn', english: 'Goodbye' },
-        ],
-      },
-      {
-        type: 'dialogue',
-        content: [
-          { speaker: 'A', chinese: '你好！', pinyin: 'nǐ hǎo!', english: 'Hello!' },
-          { speaker: 'B', chinese: '你好！', pinyin: 'nǐ hǎo!', english: 'Hello!' },
-        ],
-      },
-    ],
+  useEffect(() => {
+    loadVoices();
+  }, []);
+
+  const loadVoices = async () => {
+    try {
+      const voices = await Speech.getAvailableVoicesAsync();
+      const languageVoices = voices.filter(voice => 
+        voice.language.startsWith(languageConfig.code)
+      );
+      setAvailableVoices(languageVoices);
+      if (languageVoices.length > 0) {
+        setSelectedVoice(languageVoices[0]);
+      }
+    } catch (error) {
+      console.error('Error loading voices:', error);
+    }
+  };
+
+  const handlePlayAudio = async (text) => {
+    if (isPlaying) {
+      await Speech.stop();
+      setIsPlaying(false);
+    } else {
+      setIsPlaying(true);
+      try {
+        await Speech.speak(text, {
+          language: languageConfig.code,
+          voice: selectedVoice?.identifier,
+          pitch: 1.0,
+          rate: 0.8,
+          onDone: () => setIsPlaying(false),
+          onError: (error) => {
+            console.error('Speech error:', error);
+            setIsPlaying(false);
+          },
+        });
+      } catch (error) {
+        console.error('Error speaking:', error);
+        setIsPlaying(false);
+      }
+    }
+  };
+
+  const handleVoiceSelect = (voice) => {
+    setSelectedVoice(voice);
   };
 
   const renderContent = () => {
@@ -131,6 +159,60 @@ const LessonDetailScreen = ({ route, navigation }) => {
 
       {/* Content */}
       <ScrollView style={styles.content}>
+        <Card style={styles.lessonCard}>
+          <Card.Content>
+            <Text variant="headlineSmall" style={styles.title}>
+              {lesson.title}
+            </Text>
+            <Text variant="bodyLarge" style={styles.description}>
+              {lesson.description}
+            </Text>
+          </Card.Content>
+        </Card>
+
+        {/* Voice Selection */}
+        {availableVoices.length > 0 && (
+          <Card style={styles.voiceCard}>
+            <Card.Content>
+              <Text variant="titleMedium" style={styles.sectionTitle}>
+                Select Voice
+              </Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {availableVoices.map((voice) => (
+                  <TouchableOpacity
+                    key={voice.identifier}
+                    style={[
+                      styles.voiceOption,
+                      selectedVoice?.identifier === voice.identifier && styles.selectedVoice,
+                    ]}
+                    onPress={() => handleVoiceSelect(voice)}
+                  >
+                    <Text
+                      style={[
+                        styles.voiceText,
+                        selectedVoice?.identifier === voice.identifier && styles.selectedVoiceText,
+                      ]}
+                    >
+                      {voice.name}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </Card.Content>
+          </Card>
+        )}
+
+        <View style={styles.actions}>
+          <Button
+            mode="contained"
+            onPress={() => handlePlayAudio(lesson.title)}
+            icon={isPlaying ? 'stop' : 'play'}
+            style={styles.playButton}
+          >
+            {isPlaying ? 'Stop' : 'Play'} Pronunciation
+          </Button>
+        </View>
+
         {currentSection === 'content' ? (
           renderContent()
         ) : (
@@ -298,6 +380,41 @@ const styles = StyleSheet.create({
     color: colors.background.primary,
     fontSize: typography.fontSize.body,
     fontWeight: typography.fontWeight.semibold,
+  },
+  lessonCard: {
+    marginBottom: 16,
+  },
+  description: {
+    marginBottom: 16,
+  },
+  actions: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  playButton: {
+    minWidth: 200,
+  },
+  contentCard: {
+    marginBottom: 16,
+  },
+  voiceCard: {
+    marginBottom: 16,
+  },
+  voiceOption: {
+    padding: 8,
+    marginRight: 8,
+    borderRadius: 8,
+    backgroundColor: '#f0f0f0',
+  },
+  selectedVoice: {
+    backgroundColor: '#007AFF',
+  },
+  voiceText: {
+    color: '#000',
+  },
+  selectedVoiceText: {
+    color: '#fff',
   },
 });
 

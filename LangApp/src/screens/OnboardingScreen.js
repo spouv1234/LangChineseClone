@@ -8,19 +8,26 @@ import {
   ScrollView,
 } from 'react-native';
 import { colors, typography, spacing, shadows } from '../theme';
+import { useUserPreferences } from '../context/UserPreferencesContext';
+import { languages } from '../config/languages';
 
 const OnboardingScreen = ({ navigation }) => {
+  const { updatePreferences } = useUserPreferences();
   const [name, setName] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('');
   const [selectedVoice, setSelectedVoice] = useState('');
 
-  const languages = ['Chinese', 'Spanish', 'French', 'Japanese', 'Korean'];
   const levels = ['Beginner', 'Intermediate', 'Advanced'];
   const voices = ['Male', 'Female'];
 
   const handleComplete = () => {
-    // TODO: Save user preferences including voice selection
+    updatePreferences({
+      name,
+      language: selectedLanguage,
+      level: selectedLevel,
+      voice: selectedVoice,
+    });
     navigation.replace('MainApp');
   };
 
@@ -46,22 +53,22 @@ const OnboardingScreen = ({ navigation }) => {
         <View style={styles.section}>
           <Text style={styles.label}>Which language do you want to learn?</Text>
           <View style={styles.optionsContainer}>
-            {languages.map((language) => (
+            {Object.entries(languages).map(([key, lang]) => (
               <TouchableOpacity
-                key={language}
+                key={key}
                 style={[
                   styles.option,
-                  selectedLanguage === language && styles.selectedOption,
+                  selectedLanguage === key && styles.selectedOption,
                 ]}
-                onPress={() => setSelectedLanguage(language)}
+                onPress={() => setSelectedLanguage(key)}
               >
                 <Text
                   style={[
                     styles.optionText,
-                    selectedLanguage === language && styles.selectedOptionText,
+                    selectedLanguage === key && styles.selectedOptionText,
                   ]}
                 >
-                  {language}
+                  {lang.flag} {lang.name}
                 </Text>
               </TouchableOpacity>
             ))}
